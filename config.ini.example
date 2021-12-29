@@ -1,0 +1,10 @@
+# Settings
+StatsPath=/home/dkmur/progs/Stats				# for now we link to Stats as most params/scripts are there already
+ptcCheckInterval=5m						# interval for checking sso.pokemon.com/sso/login
+
+
+# In case server is not located on same IP as devices
+# ????? copy scripts+config+pm2 or something??????
+ip_madserver=							# ip address of MAD server
+port=8888							# port to listen on for webhook from local server, make sure to open port on firewall
+
