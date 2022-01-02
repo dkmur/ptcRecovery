@@ -4,14 +4,17 @@ idiots attempt to automate recovery from PTC login IP ban.<br>
 <br>
 <br>
 ## Installation
-- git clone and copy config file `https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
+On (MAD) server where
+- git clone and copy config file `git clone https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
 - fill out details in config.ini, top part<br>
 - install ncat. Debian `sudo apt install ncat`, Ubuntu `sudo apt install nmap`<br>
+- make sure Stats is cloned and up-to-date https://github.com/dkmur/Stats as we use some scripts from it, no need to actually run it<br>
 <br>
 in case (MAD) server is not located on same WAN IP as devices (setting serverLocal=false):<br>
-- clone ptcRecovery on local server `https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
+
+- clone ptcRecovery on local server `git clone https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
 - fill out details in config.ini, bottom section<br>
-- open up firewall for port used<br>
+- open up firewall on remote server for port used<br>
 <br>
 
 ## Execute using pm2
