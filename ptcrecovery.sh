@@ -32,7 +32,8 @@ getstatus
 if (( $result != 200 ))
 then
   echo "PTC login did NOT respond, status code $result"
-
+  timing=$(date '+%Y%m%d %H:%M:%S')
+  echo "[$timing] PTC login did NOT respond, status code $result" >> log.txt
 # start seconday loop, until PTC login can be reached again
   while :
   do
@@ -40,6 +41,8 @@ then
   if (( $result == 200 ))
   then
     echo "PTC login responded again"
+    timing=$(date '+%Y%m%d %H:%M:%S')
+    echo "[$timing] PTC login responded again, status code $result" >> log.txt
 
 #     start third loop, we keep checking for code 200 and start unpausing devices
       while :
@@ -49,10 +52,14 @@ then
       if (( $result == 200 && $ptcpausecount != 0 ))
       then
       echo "$ptcpausecount devices paused, unpausing in batches according to Stats settings"
+      timing=$(date '+%Y%m%d %H:%M:%S')
+      echo "[$timing] $ptcpausecount devices paused, unpausing in batches" >> log.txt
       unpausePTC
       sleep $batch_wait_ptc
       else
       echo "no devices (left) to unpause, reverting to main loop"
+      timing=$(date '+%Y%m%d %H:%M:%S')
+      echo "[$timing] no devices (left) to unpause, reverting to main loop" >> log.txt
       break
       fi
       done
@@ -60,6 +67,8 @@ then
     break
   else
     echo "Pausing PTC device not idle and no proto received according to Stats settings"
+    timing=$(date '+%Y%m%d %H:%M:%S')
+    echo "[$timing] still no PTC login possible ($result), pausing devices" >> log.txt
     pausePTC
     echo "PTC login did NOT respond, status $result, continue failure loop"
   fi
