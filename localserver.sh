@@ -9,6 +9,6 @@ result=$(curl -s -k https://sso.pokemon.com/sso/login -o /dev/null -w '%{http_co
 while :
 do
 getstatus
-curl -X POST -d "data=$result" http://$ip:$port
+curl -X POST -d "data=$result" http://$ip_madserver:$port
 sleep $ptcCheckInterval
 done
