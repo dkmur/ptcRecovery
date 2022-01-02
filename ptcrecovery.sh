@@ -34,6 +34,7 @@ then
   echo "PTC login did NOT respond, status code $result"
   timing=$(date '+%Y%m%d %H:%M:%S')
   echo "[$timing] PTC login did NOT respond, status code $result" >> log.txt
+  $StatsPath/default_files/discord.sh --username "PTC login check" --color "16711680" --avatar "https://i.imgur.com/2O5hrN6.png" --webhook-url "$ptcwebhook" --description "PTC login failure, status code $result"
 # start seconday loop, until PTC login can be reached again
   while :
   do
@@ -43,7 +44,7 @@ then
     echo "PTC login responded again"
     timing=$(date '+%Y%m%d %H:%M:%S')
     echo "[$timing] PTC login responded again, status code $result" >> log.txt
-
+    $StatsPath/default_files/discord.sh --username "PTC login check" --color "65280" --avatar "https://i.imgur.com/2O5hrN6.png" --webhook-url "$ptcwebhook" --description "PTC login working, status code $result"
 #     start third loop, we keep checking for code 200 and start unpausing devices
       while :
       do

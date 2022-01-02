@@ -2,6 +2,7 @@
 StatsPath=/home/dkmur/progs/Stats				# for now we link to Stats as most params/scripts are there already
 ptcCheckInterval=5m						# interval for checking sso.pokemon.com/sso/login
 serverLocal=false						# true/false, server location same as devices
+ptcwebhook=https://discord.com/api/webhooks/...			# webhook for posting message to discord
 
 # In case server is not located on same IP as devices (serverLocal=false)
 ip_madserver=							# ip address of MAD server
