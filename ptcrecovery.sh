@@ -3,85 +3,70 @@
 source config.ini
 source $StatsPath/config.ini
 
-startListen(){
-while :
-do
-#netcat -l 8888  < response.txt | grep data | cut -d= -f2
-result=$(netcat -l $port  < response.txt | grep data | cut -d= -f2)
-# echo $result
-done
+getstatus(){
+if "$serverLocal"
+then
+  sleep $ptcCheckInterval
+  result=$(curl -s -k https://sso.pokemon.com/sso/login -o /dev/null -w '%{http_code}')
+else
+  result=$(netcat -l $port  < response.txt | grep data | cut -d= -f2)
+fi
 }
 
-checkPTC(){
-while :
-do
-result=$(curl -s -k https://sso.pokemon.com/sso/login -o /dev/null -w '%{http_code}')
-sleep $ptcCheckInterval
-done
+ptcpause(){
+ptcpausecount=$(mysql -u$SQL_user -p$SQL_password -h$DB_IP -P$DB_PORT $MAD_DB -NB -e "select count(a.device_id) from settings_device a, madmin_instance b, trs_status c where a.logintype = 'ptc' and a.device_id = c.device_id and a.instance_id = b.instance_id and a.instance_id = c.instance_id and c.idle = 1;")
 }
 
 pausePTC(){
-cd $StatsPath/scripts  && ./pause_noproto_ptc_devices.sh
+$StatsPath/scripts/pause_noproto_ptc_devices.sh
 }
 
 unpausePTC(){
-cd $StatsPath/scripts  && ./unpause_batch_ptc_devices_exit.sh
+$StatsPath/scripts/unpause_batch_ptc_devices_exit.sh
 }
-
-# check if server is local and get sso status
-if "serverLocal"
-then
-  checkPTC
-else
-  startListen
-fi
 
 # start endless loop to check PTC login page every $checkinterval
 while :
 do
-# getstatus
+getstatus
 if (( $result != 200 ))
 then
-  echo "PTC login did not respond, status code $result"
-  echo "sleeping $checkinterval, main loop"
-  sleep 1m
+  echo "PTC login did NOT respond, status code $result"
 
 # start seconday loop, until PTC login can be reached again
   while :
   do
-#  getstatus
+  getstatus
   if (( $result == 200 ))
   then
     echo "PTC login responded again"
-    echo "sleeping $checkinterval, failure loop"
-    sleep 1m
 
 #     start third loop, we keep checking for code 200 and start unpausing devices
       while :
       do
-#      getstatus
-      if (( $result == 200 && $ptcpause != 0 ))
+      getstatus
+      ptcpause
+      if (( $result == 200 && $ptcpausecount != 0 ))
       then
-      echo "Unpausing batch of devices according to Stats settings"
+      echo "$ptcpausecount devices paused, unpausing in batches according to Stats settings"
       unpausePTC
       sleep $batch_wait_ptc
       else
+      echo "no devices (left) to unpause, reverting to main loop"
       break
       fi
       done
 
     break
   else
-    echo $result
     echo "Pausing PTC device not idle and no proto received according to Stats settings"
     pausePTC
-    echo "sleeping $checkinterval, continue login failure loop"
-    sleep 1m
+    echo "PTC login did NOT respond, status $result, continue failure loop"
   fi
   done
 else
-  echo $result
-  echo "sleeping $checkinterval, main loop"
-  sleep 1m
+#  echo $result
+  echo "PTC login responded, status $result, continue main loop"
+#  sleep 1m
 fi
 done
