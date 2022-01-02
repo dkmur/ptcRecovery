@@ -4,7 +4,7 @@ idiots attempt to automate recovery from PTC login IP ban.<br>
 <br>
 <br>
 ## Installation
-On (MAD) server where
+On main (MAD) server:
 - git clone and copy config file `git clone https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
 - enter details in config.ini<br>
 - install ncat. Debian `sudo apt install ncat`, Ubuntu `sudo apt install nmap`<br>
