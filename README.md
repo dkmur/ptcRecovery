@@ -10,7 +10,7 @@ On main (MAD) server:
 - install ncat. Debian `sudo apt install ncat`, Ubuntu `sudo apt install nmap`<br>
 - make sure Stats is cloned and up-to-date https://github.com/dkmur/Stats as we use some scripts from it, no need to actually run it<br>
 <br>
-in case (MAD) server is not located on same WAN IP as devices (setting serverLocal=false):<br>
+in case (MAD) server is NOT located on same WAN IP as devices (setting serverLocal=false):<br>
 
 - clone ptcRecovery on local server `git clone https://github.com/dkmur/ptcRecovery.git && cd ptcRecovery && cp config.ini.example config.ini`<br>
 - enter details in config.ini<br>
