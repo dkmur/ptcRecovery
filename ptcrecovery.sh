@@ -29,7 +29,7 @@ $StatsPath/scripts/unpause_batch_ptc_devices_exit.sh
 while :
 do
 getstatus
-if (( $result != 200 ))
+if (( $result != 200 && $result != 000 ))
 then
   echo "PTC login did NOT respond, status code $result"
   timing=$(date '+%Y%m%d %H:%M:%S')
